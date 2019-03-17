@@ -10,7 +10,7 @@ public class Customer {
 	private Integer id;
 	private String firstName;
 	private String lastName;
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(nullable = true, name = "username")
 	private User user;
 

@@ -14,7 +14,7 @@ public class User {
 	@JsonIgnore
 	private String encodedPassword;
 	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private List<Customer> customers;
 
 	public String getUsername() {
