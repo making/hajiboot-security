@@ -1,12 +1,7 @@
 FROM bellsoft/liberica-openjdk-debian:8 as builder
 WORKDIR application
-ADD ./.mvn .mvn/
-ADD ./mvnw mvnw
-ADD ./pom.xml pom.xml
-ADD ./src src/
-RUN ./mvnw -V clean package -DskipTests --no-transfer-progress && \
-    cp target/*.jar application.jar && \
-    java -Djarmode=layertools -jar application.jar extract
+COPY ./target/*.jar application.jar
+RUN java -Djarmode=layertools -jar application.jar extract
 
 FROM bellsoft/liberica-openjre-debian:8
 ARG USERNAME=spring
