@@ -1,7 +1,10 @@
 FROM bellsoft/liberica-openjdk-debian:8 as builder
 WORKDIR application
-RUN apt-get update -qq && \
-    apt-get install unzip --no-install-recommends -y -qq
+#RUN apt-get update -qq && \
+#    apt-get install unzip --no-install-recommends -y -qq
+RUN curl -sL -o unzip.deb http://ftp.de.debian.org/debian/pool/main/u/unzip/unzip_6.0-26+deb11u1_$(uname -m | sed -e 's/x86_/amd/' -e 's/aarch/arm/').deb && \
+    dpkg -i unzip.deb && \
+    rm -f unzip.deb
 COPY ./target/*.jar application.jar
 COPY ./docker/class_counter.sh ./
 RUN java -Djarmode=layertools -jar application.jar extract && \
