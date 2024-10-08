@@ -9,10 +9,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "users")
 public class User {
+
 	@Id
 	private String username;
+
 	@JsonIgnore
 	private String encodedPassword;
+
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private List<Customer> customers;
@@ -40,4 +43,5 @@ public class User {
 	public void setCustomers(List<Customer> customers) {
 		this.customers = customers;
 	}
+
 }

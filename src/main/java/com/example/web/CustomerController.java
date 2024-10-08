@@ -19,6 +19,7 @@ import com.example.service.LoginUserDetails;
 @Controller
 @RequestMapping("customers")
 public class CustomerController {
+
 	private final CustomerService customerService;
 
 	public CustomerController(CustomerService customerService) {
@@ -52,15 +53,15 @@ public class CustomerController {
 	@GetMapping(path = "edit", params = "form")
 	public String editForm(@RequestParam Integer id, CustomerForm form) {
 		Customer customer = customerService.findOne(id)
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-						"The given customer id is not found : " + id));
+			.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+					"The given customer id is not found : " + id));
 		BeanUtils.copyProperties(customer, form);
 		return "customers/edit";
 	}
 
 	@PostMapping(path = "edit")
-	public String edit(@RequestParam Integer id, @Validated CustomerForm form,
-			BindingResult result, @AuthenticationPrincipal LoginUserDetails userDetails) {
+	public String edit(@RequestParam Integer id, @Validated CustomerForm form, BindingResult result,
+			@AuthenticationPrincipal LoginUserDetails userDetails) {
 		if (result.hasErrors()) {
 			return editForm(id, form);
 		}
@@ -81,4 +82,5 @@ public class CustomerController {
 		customerService.delete(id);
 		return "redirect:/customers";
 	}
+
 }

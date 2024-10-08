@@ -9,4 +9,5 @@ public class HajibootSecurityApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(HajibootSecurityApplication.class, args);
 	}
+
 }

@@ -15,6 +15,7 @@ import com.example.repository.CustomerRepository;
 @Service
 @Transactional
 public class CustomerService {
+
 	private final CustomerRepository customerRepository;
 
 	public CustomerService(CustomerRepository customerRepository) {
@@ -46,4 +47,5 @@ public class CustomerService {
 	public void delete(Integer id) {
 		customerRepository.deleteById(id);
 	}
+
 }

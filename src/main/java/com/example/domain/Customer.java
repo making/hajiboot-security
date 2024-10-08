@@ -5,11 +5,15 @@ import javax.persistence.*;
 @Entity
 @Table(name = "customers")
 public class Customer {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+
 	private String firstName;
+
 	private String lastName;
+
 	@ManyToOne
 	@JoinColumn(nullable = true, name = "username")
 	private User user;
@@ -45,4 +49,5 @@ public class Customer {
 	public void setUser(User user) {
 		this.user = user;
 	}
+
 }

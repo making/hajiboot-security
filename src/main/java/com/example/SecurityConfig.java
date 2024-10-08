@@ -11,16 +11,21 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		return http.authorizeHttpRequests(requests -> requests //
-						.mvcMatchers("/webjars/**").permitAll() //
-						.mvcMatchers("/css/**").permitAll() //
-						.anyRequest().authenticated()) //
-				.formLogin(login -> login //
-						.loginProcessingUrl("/login") //
-						.loginPage("/loginForm").permitAll() //
-						.failureUrl("/loginForm?error") //
-						.defaultSuccessUrl("/customers", true)) //
-				.logout(logout -> logout.logoutSuccessUrl("/loginForm"))
-				.csrf(csrf -> csrf.ignoringAntMatchers("/logout"))
-				.build();
+			.mvcMatchers("/webjars/**")
+			.permitAll() //
+			.mvcMatchers("/css/**")
+			.permitAll() //
+			.anyRequest()
+			.authenticated()) //
+			.formLogin(login -> login //
+				.loginProcessingUrl("/login") //
+				.loginPage("/loginForm")
+				.permitAll() //
+				.failureUrl("/loginForm?error") //
+				.defaultSuccessUrl("/customers", true)) //
+			.logout(logout -> logout.logoutSuccessUrl("/loginForm"))
+			.csrf(csrf -> csrf.ignoringAntMatchers("/logout"))
+			.build();
 	}
+
 }

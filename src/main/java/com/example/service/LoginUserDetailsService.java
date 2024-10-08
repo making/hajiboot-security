@@ -9,6 +9,7 @@ import com.example.repository.UserRepository;
 
 @Service
 public class LoginUserDetailsService implements UserDetailsService {
+
 	private final UserRepository userRepository;
 
 	public LoginUserDetailsService(UserRepository userRepository) {
@@ -16,9 +17,10 @@ public class LoginUserDetailsService implements UserDetailsService {
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String username)
-			throws UsernameNotFoundException {
-		return userRepository.findById(username).map(LoginUserDetails::new).orElseThrow(
-				() -> new UsernameNotFoundException("The requested user is not found."));
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		return userRepository.findById(username)
+			.map(LoginUserDetails::new)
+			.orElseThrow(() -> new UsernameNotFoundException("The requested user is not found."));
 	}
+
 }
