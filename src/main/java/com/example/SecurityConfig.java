@@ -20,6 +20,7 @@ public class SecurityConfig {
 						.failureUrl("/loginForm?error") //
 						.defaultSuccessUrl("/customers", true)) //
 				.logout(logout -> logout.logoutSuccessUrl("/loginForm"))
+				.csrf(csrf -> csrf.ignoringAntMatchers("/logout"))
 				.build();
 	}
 }
