@@ -1,4 +1,6 @@
 #!/bin/bash
+set -e
+
 get_container_memory_limit() {
 	# Function to check if a file exists and contains a numeric value
 	check_numeric_file() {
@@ -12,7 +14,7 @@ get_container_memory_limit() {
 		cat /sys/fs/cgroup/memory.max
 	elif grep -q '^MemTotal:' /proc/meminfo && awk '/^MemTotal:/ {print $2}' /proc/meminfo | grep -q '^[0-9]\+$'; then
 		# Get MemTotal from /proc/meminfo and convert to bytes (kB to bytes)
-		awk '/^MemTotal:/ {print $2 * 1024}' /proc/meminfo
+		awk '/^MemTotal:/ {printf "%d\n", $2 * 1024}' /proc/meminfo
 	else
 		echo "Unable to determine memory limit or file contents are invalid." >&2
 		return 1
@@ -21,7 +23,7 @@ get_container_memory_limit() {
 
 TOTAL_MEMORY=$(get_container_memory_limit)
 if [ "$TOTAL_MEMORY" = "9223372036854771712" ];then
-  TOTAL_MEMORY=1G
+  TOTAL_MEMORY=1073741824
 fi
 LOADED_CLASS_COUNT=$(cat /opt/class_count)
 # Load Factor = 60%
