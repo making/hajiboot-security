@@ -37,7 +37,19 @@ JVM_MEMORY_CONFIGURATION=$(java-buildpack-memory-calculator-linux \
 echo "JVM Memory Configuration: ${JVM_MEMORY_CONFIGURATION}"
 export JAVA_TOOL_OPTIONS="-XX:+ExitOnOutOfMemoryError ${JVM_MEMORY_CONFIGURATION} ${JAVA_TOOL_OPTIONS}"
 
-java org.springframework.boot.loader.JarLauncher &
+if [ -f org/springframework/boot/loader/launch/JarLauncher.class ]; then
+    # Spring Boot 3.2+
+    JAR_LAUNCHER=org.springframework.boot.loader.launch.JarLauncher
+elif [ -f org/springframework/boot/loader/JarLauncher.class ]; then
+    # prior to Spring Boot 3.2
+    JAR_LAUNCHER=org.springframework.boot.loader.JarLauncher
+else
+    echo "Error: Neither org.springframework.boot.loader.launch.JarLauncher nor org.springframework.boot.loader.JarLauncher class found in $EXTRACTED_DIR"
+    exit 1
+fi
+
+
+java $JAR_LAUNCHER &
 JAVA_PID=$!
 
 stop_java_app() {
