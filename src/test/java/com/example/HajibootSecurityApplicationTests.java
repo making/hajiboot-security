@@ -62,25 +62,23 @@ class HajibootSecurityApplicationTests {
 	void step01_login_user1_and_listCustomers() throws Exception {
 		HtmlPage top = login("user1", "demo");
 		String text = top.getBody().getVisibleText().trim();
-		assertThat(text).isEqualTo("顧客管理システム\n" + "user1さんログイン中。\n" + "顧客情報作成\n" + "姓\n" + "名\n" + "作成\n"
-				+ "ID 姓 名 担当者 編集\n" + "1 Nobi Nobita user1 \n" + " \n" + "4 Minamoto Shizuka user1 \n" + " \n"
-				+ "3 Honekawa Suneo user1 \n" + " \n" + "2 Goda Takeshi user1");
+		assertThat(text).isEqualTo(
+				"顧客管理システム\nuser1さんログイン中。\n顧客情報作成\n姓\n名\n作成\nID 姓 名 担当者 編集\n1 Nobi Nobita user1 \n \n4 Minamoto Shizuka user1 \n \n3 Honekawa Suneo user1 \n \n2 Goda Takeshi user1");
 	}
 
 	@Test
 	void step02_login_user2_and_listCustomers() throws Exception {
 		HtmlPage top = login("user2", "demo");
 		String text = top.getBody().getVisibleText().trim();
-		assertThat(text).isEqualTo("顧客管理システム\n" + "user2さんログイン中。\n" + "顧客情報作成\n" + "姓\n" + "名\n" + "作成\n"
-				+ "ID 姓 名 担当者 編集\n" + "1 Nobi Nobita user1 \n" + " \n" + "4 Minamoto Shizuka user1 \n" + " \n"
-				+ "3 Honekawa Suneo user1 \n" + " \n" + "2 Goda Takeshi user1");
+		assertThat(text).isEqualTo(
+				"顧客管理システム\nuser2さんログイン中。\n顧客情報作成\n姓\n名\n作成\nID 姓 名 担当者 編集\n1 Nobi Nobita user1 \n \n4 Minamoto Shizuka user1 \n \n3 Honekawa Suneo user1 \n \n2 Goda Takeshi user1");
 	}
 
 	@Test
 	void step03_login_failure() throws Exception {
 		HtmlPage top = login("user3", "demo");
 		String text = top.getBody().getVisibleText().trim();
-		assertThat(text).isEqualTo("顧客管理システム\n" + "ログインフォーム\n" + "ユーザー名またはパスワードが正しくありません。\n" + "Sign in");
+		assertThat(text).isEqualTo("顧客管理システム\nログインフォーム\nユーザー名またはパスワードが正しくありません。\nSign in");
 	}
 
 	@Test
@@ -93,10 +91,8 @@ class HajibootSecurityApplicationTests {
 		HtmlPage created = submit.click();
 
 		String text = created.getBody().getVisibleText().trim();
-		assertThat(text).isEqualTo("顧客管理システム\n" + "user2さんログイン中。\n" + "顧客情報作成\n" + "姓\n"
-				+ "size must be between 1 and 127\n" + "名\n" + "size must be between 1 and 127\n" + "作成\n"
-				+ "ID 姓 名 担当者 編集\n" + "1 Nobi Nobita user1 \n" + " \n" + "4 Minamoto Shizuka user1 \n" + " \n"
-				+ "3 Honekawa Suneo user1 \n" + " \n" + "2 Goda Takeshi user1");
+		assertThat(text).isEqualTo(
+				"顧客管理システム\nuser2さんログイン中。\n顧客情報作成\n姓\nsize must be between 1 and 127\n名\nsize must be between 1 and 127\n作成\nID 姓 名 担当者 編集\n1 Nobi Nobita user1 \n \n4 Minamoto Shizuka user1 \n \n3 Honekawa Suneo user1 \n \n2 Goda Takeshi user1");
 	}
 
 	@Test
@@ -109,9 +105,8 @@ class HajibootSecurityApplicationTests {
 		HtmlPage created = submit.click();
 
 		String text = created.getBody().getVisibleText().trim();
-		assertThat(text).isEqualTo("顧客管理システム\n" + "user2さんログイン中。\n" + "顧客情報作成\n" + "姓\n" + "名\n" + "作成\n"
-				+ "ID 姓 名 担当者 編集\n" + "1 Nobi Nobita user1 \n" + " \n" + "4 Minamoto Shizuka user1 \n" + " \n"
-				+ "3 Honekawa Suneo user1 \n" + " \n" + "2 Goda Takeshi user1 \n" + " \n" + "5 Maki Toshiaki user2");
+		assertThat(text).isEqualTo(
+				"顧客管理システム\nuser2さんログイン中。\n顧客情報作成\n姓\n名\n作成\nID 姓 名 担当者 編集\n1 Nobi Nobita user1 \n \n4 Minamoto Shizuka user1 \n \n3 Honekawa Suneo user1 \n \n2 Goda Takeshi user1 \n \n5 Maki Toshiaki user2");
 	}
 
 	@Test
@@ -131,8 +126,8 @@ class HajibootSecurityApplicationTests {
 		HtmlPage edited = edit.click();
 
 		String text = edited.getBody().getVisibleText().trim();
-		assertThat(text).isEqualTo("顧客管理システム\n" + "user2さんログイン中。\n" + "顧客情報編集\n" + "姓\n"
-				+ "size must be between 1 and 127\n" + "名\n" + "size must be between 1 and 127");
+		assertThat(text).isEqualTo(
+				"顧客管理システム\nuser2さんログイン中。\n顧客情報編集\n姓\nsize must be between 1 and 127\n名\nsize must be between 1 and 127");
 	}
 
 	@Test
@@ -151,9 +146,8 @@ class HajibootSecurityApplicationTests {
 		HtmlPage edited = edit.click();
 
 		String text = edited.getBody().getVisibleText().trim();
-		assertThat(text).startsWith("顧客管理システム\n" + "user2さんログイン中。\n" + "顧客情報作成\n" + "姓\n" + "名\n" + "作成\n"
-				+ "ID 姓 名 担当者 編集\n" + "1 Suzuki Nobita user2 \n" + " \n" + "4 Minamoto Shizuka user1 \n" + " \n"
-				+ "3 Honekawa Suneo user1 \n" + " \n" + "2 Goda Takeshi user1");
+		assertThat(text).startsWith(
+				"顧客管理システム\nuser2さんログイン中。\n顧客情報作成\n姓\n名\n作成\nID 姓 名 担当者 編集\n1 Suzuki Nobita user2 \n \n4 Minamoto Shizuka user1 \n \n3 Honekawa Suneo user1 \n \n2 Goda Takeshi user1");
 	}
 
 	@Test
@@ -164,9 +158,8 @@ class HajibootSecurityApplicationTests {
 		HtmlPage deleted = submit.click();
 
 		String text = deleted.getBody().getVisibleText().trim();
-		assertThat(text).startsWith("顧客管理システム\n" + "user2さんログイン中。\n" + "顧客情報作成\n" + "姓\n" + "名\n" + "作成\n"
-				+ "ID 姓 名 担当者 編集\n" + "4 Minamoto Shizuka user1 \n" + " \n" + "3 Honekawa Suneo user1 \n" + " \n"
-				+ "2 Goda Takeshi user1");
+		assertThat(text).startsWith(
+				"顧客管理システム\nuser2さんログイン中。\n顧客情報作成\n姓\n名\n作成\nID 姓 名 担当者 編集\n4 Minamoto Shizuka user1 \n \n3 Honekawa Suneo user1 \n \n2 Goda Takeshi user1");
 	}
 
 	@Test
@@ -176,9 +169,9 @@ class HajibootSecurityApplicationTests {
 		HtmlInput submit = form.getInputByValue("ログアウト");
 		HtmlPage login = submit.click();
 		String text = login.getBody().getVisibleText();
-		assertThat(text).isEqualTo("顧客管理システム\n" + //
-				"ログインフォーム\n" + //
-				"Sign in");
+		//
+		//
+		assertThat(text).isEqualTo("顧客管理システム\nログインフォーム\nSign in");
 	}
 
 }
