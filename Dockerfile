@@ -3,15 +3,15 @@ WORKDIR application
 RUN --mount=type=cache,target=/var/lib/apt,sharing=locked \
     --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt-get update -qq && \
-    apt-get install unzip --no-install-recommends -y -qq \
+    apt-get install unzip --no-install-recommends -y -qq
 # or
 #RUN curl -sL -o unzip.deb http://ftp.de.debian.org/debian/pool/main/u/unzip/unzip_6.0-26+deb11u1_$(uname -m | sed -e 's/x86_/amd/' -e 's/aarch/arm/').deb && \
 #    dpkg -i unzip.deb && \
 #    rm -f unzip.deb
 RUN --mount=type=cache,target=/root/.m2/,sharing=locked \
     --mount=type=bind,target=.,readwrite \
-    ./mvnw -V clean package -DskipTests --no-transfer-progress && \
-RUN --mount=type=bind,target=.,readwrite \
+    ./mvnw -V clean package -DskipTests --no-transfer-progress
+RUN --mount=type=bind,target=. \
     java -Djarmode=layertools -jar target/*.jar extract --destination /opt && \
     bash ./docker/class_counter.sh /opt/application /opt/dependencies > /opt/class_count
 
