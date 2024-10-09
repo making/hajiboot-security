@@ -8,13 +8,14 @@ RUN --mount=type=cache,target=/var/lib/apt,sharing=locked \
 #RUN curl -sL -o unzip.deb http://ftp.de.debian.org/debian/pool/main/u/unzip/unzip_6.0-26+deb11u1_$(uname -m | sed -e 's/x86_/amd/' -e 's/aarch/arm/').deb && \
 #    dpkg -i unzip.deb && \
 #    rm -f unzip.deb
-RUN --mount=type=cache,target=/root/.m2/,sharing=locked \
+RUN --mount=type=cache,target=/root/.m2,sharing=locked \
     --mount=type=bind,target=.,readwrite \
     ./mvnw -V clean package -DskipTests --no-transfer-progress
 RUN --mount=type=bind,target=. \
     java -Djarmode=layertools -jar target/*.jar extract --destination /opt && \
-    bash ./docker/class_counter.sh /opt/application /opt/dependencies > /opt/class_count && \
-    cp ./docker/entrypoint.sh /opt
+    curl -sL -o /opt/entrypoint.sh https://github.com/making/dockerfile-utils/raw/refs/heads/main/entrypoint.sh && \
+    curl -sL -o /opt/class_counter.sh https://github.com/making/dockerfile-utils/raw/refs/heads/main/class_counter.sh && \
+    bash /opt/class_counter.sh /opt/application /opt/dependencies > /opt/class_count
 
 FROM bellsoft/liberica-openjre-debian:8
 ARG USERNAME=spring
