@@ -28,15 +28,17 @@ fi
 LOADED_CLASS_COUNT=$(cat /opt/class_count)
 # Load Factor = 60%
 LOADED_CLASS_COUNT=$((LOADED_CLASS_COUNT * 60 / 100))
+THREAD_COUNT=${BPL_JVM_THREAD_COUNT:-100}
+HEAD_ROOM=${BPL_JVM_HEAD_ROOM:-0}
 JVM_MEMORY_CONFIGURATION=$(java-buildpack-memory-calculator-linux \
   -totMemory "${TOTAL_MEMORY}B" \
   -loadedClasses "${BPL_JVM_LOADED_CLASS_COUNT:-$LOADED_CLASS_COUNT}" \
-  -stackThreads "${BPL_JVM_THREAD_COUNT:-100}" \
+  -stackThreads "${THREAD_COUNT}" \
   -vmOptions "${JAVA_TOOL_OPTIONS}" \
-  -headRoom "${BPL_JVM_HEAD_ROOM:-0}" \
+  -headRoom "${HEAD_ROOM}" \
   -poolType metaspace)
 
-echo "JVM Memory Configuration: ${JVM_MEMORY_CONFIGURATION}"
+echo "JVM Memory Configuration: ${JVM_MEMORY_CONFIGURATION} (total memory: ${TOTAL_MEMORY}B, loaded classes: ${LOADED_CLASS_COUNT}, head room: ${HEAD_ROOM}%) "
 export JAVA_TOOL_OPTIONS="-XX:+ExitOnOutOfMemoryError ${JVM_MEMORY_CONFIGURATION} ${JAVA_TOOL_OPTIONS}"
 
 if [ -f org/springframework/boot/loader/launch/JarLauncher.class ]; then

@@ -1,17 +1,20 @@
 FROM bellsoft/liberica-openjdk-debian:8 as builder
 WORKDIR application
-#RUN apt-get update -qq && \
-#    apt-get install unzip --no-install-recommends -y -qq
-RUN curl -sL -o unzip.deb http://ftp.de.debian.org/debian/pool/main/u/unzip/unzip_6.0-26+deb11u1_$(uname -m | sed -e 's/x86_/amd/' -e 's/aarch/arm/').deb && \
-    dpkg -i unzip.deb && \
-    rm -f unzip.deb
-COPY ./target/*.jar application.jar
-COPY ./docker/class_counter.sh ./
-RUN java -Djarmode=layertools -jar application.jar extract && \
-    rm application.jar && \
-    bash class_counter.sh application dependencies > class_count && \
-    rm -rf /var/lib/apt/lists/* && \
-    apt-get clean
+RUN --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    apt-get update -qq && \
+    apt-get install unzip --no-install-recommends -y -qq \
+# or
+#RUN curl -sL -o unzip.deb http://ftp.de.debian.org/debian/pool/main/u/unzip/unzip_6.0-26+deb11u1_$(uname -m | sed -e 's/x86_/amd/' -e 's/aarch/arm/').deb && \
+#    dpkg -i unzip.deb && \
+#    rm -f unzip.deb
+RUN --mount=type=cache,target=/root/.m2/,sharing=locked \
+    --mount=type=bind,target=.,readwrite \
+    ./mvnw -V clean package -DskipTests --no-transfer-progress && \
+RUN --mount=type=bind,target=.,readwrite \
+    java -Djarmode=layertools -jar target/*.jar extract --destination /opt && \
+    bash ./docker/class_counter.sh /opt/application /opt/dependencies > /opt/class_count
+
 FROM bellsoft/liberica-openjre-debian:8
 ARG USERNAME=spring
 ARG GROUPNAME=spring
@@ -24,10 +27,10 @@ RUN curl -sL -o memory-calculator.tgz https://java-buildpack.cloudfoundry.org/me
     tar -xzf memory-calculator.tgz -C /usr/local/bin && \
     rm -f memory-calculator.tgz
 USER $USERNAME
-COPY --from=builder application/dependencies/ ./
-COPY --from=builder application/spring-boot-loader/ ./
-COPY --from=builder application/snapshot-dependencies/ ./
-COPY --from=builder application/application/ ./
-COPY --from=builder application/class_count /opt/
+COPY --from=builder /opt/dependencies/ ./
+COPY --from=builder /opt/spring-boot-loader/ ./
+COPY --from=builder /opt/snapshot-dependencies/ ./
+COPY --from=builder /opt/application/ ./
+COPY --from=builder /opt/class_count /opt/
 COPY ./docker/entrypoint.sh ./
 ENTRYPOINT ["bash", "/application/entrypoint.sh"]
