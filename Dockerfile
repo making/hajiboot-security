@@ -13,7 +13,8 @@ RUN --mount=type=cache,target=/root/.m2/,sharing=locked \
     ./mvnw -V clean package -DskipTests --no-transfer-progress
 RUN --mount=type=bind,target=. \
     java -Djarmode=layertools -jar target/*.jar extract --destination /opt && \
-    bash ./docker/class_counter.sh /opt/application /opt/dependencies > /opt/class_count
+    bash ./docker/class_counter.sh /opt/application /opt/dependencies > /opt/class_count && \
+    cp ./docker/entrypoint.sh /opt
 
 FROM bellsoft/liberica-openjre-debian:8
 ARG USERNAME=spring
@@ -32,5 +33,5 @@ COPY --from=builder /opt/spring-boot-loader/ ./
 COPY --from=builder /opt/snapshot-dependencies/ ./
 COPY --from=builder /opt/application/ ./
 COPY --from=builder /opt/class_count /opt/
-COPY ./docker/entrypoint.sh ./
-ENTRYPOINT ["bash", "/application/entrypoint.sh"]
+COPY --from=builder /opt/entrypoint.sh /opt/
+ENTRYPOINT ["bash", "/opt/entrypoint.sh"]
